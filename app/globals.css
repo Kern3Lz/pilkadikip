@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif), Georgia, Cambria, serif;
+
+  --color-brand-yellow: #FFD000;
+  --color-brand-yellow-hover: #E6BC00;
+  --color-brand-gold: #C88A00;
+  --color-brand-dark: #2B180D;
+  --color-brand-canvas: #FAF8F5;
+  --color-brand-border: #E8E2D8;
+  --color-brand-muted: #64748B;
+}
+
+/* Base Styles */
+body {
+  background-color: #FAF8F5;
+  color: #2B180D;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom delicate pattern for institutional feel */
+.bg-batik-subtle {
+  background-color: #FAF8F5;
+  background-image: radial-gradient(#E8E2D8 0.75px, transparent 0.75px);
+  background-size: 16px 16px;
+}
