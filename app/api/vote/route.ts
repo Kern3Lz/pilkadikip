@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { recordVote, getVoter } from "@/lib/db";
+import { recordVote } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,9 +13,10 @@ export async function POST(req: NextRequest) {
 
     const identifier = decodeURIComponent(voterCookie);
     const body = await req.json();
-    const { candidateId } = body;
+    const candidateId = Number(body?.candidateId);
 
-    if (!candidateId || (candidateId !== 1 && candidateId !== 2)) {
+    // OWASP A03 / A04: Strict Type & Value Validation
+    if (!Number.isInteger(candidateId) || (candidateId !== 1 && candidateId !== 2)) {
       return NextResponse.json(
         { error: "Pasangan calon yang dipilih tidak valid." },
         { status: 400 }
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Atomic vote record
-    const result = recordVote(identifier, Number(candidateId));
+    const result = await recordVote(identifier, Number(candidateId));
     if (!result.success) {
       return NextResponse.json(
         { error: result.message },

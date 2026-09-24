@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { CANDIDATES } from "@/lib/candidate-data";
 import { CandidateCard } from "@/components/CandidateCard";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
 import { InstitutionalLogos } from "@/components/BrandElements";
 import { InstitutionalFooter } from "@/components/InstitutionalFooter";
-import { LogOut, User, CheckCircle2, ShieldCheck, BookOpen, ChevronsUpDown } from "lucide-react";
+import { LogOut, User, CheckCircle2 } from "lucide-react";
 
 export default function VotePage() {
   const router = useRouter();
@@ -66,16 +67,6 @@ export default function VotePage() {
     }));
   };
 
-  // Toggle both cards together for side-by-side comparison
-  const areAllExpanded = expandedCards[1] && expandedCards[2];
-  const handleToggleBothVisiMisi = () => {
-    const nextState = !areAllExpanded;
-    setExpandedCards({
-      1: nextState,
-      2: nextState,
-    });
-  };
-
   const handleOpenConfirmation = () => {
     if (!selectedCandidateId) return;
     setIsModalOpen(true);
@@ -123,19 +114,19 @@ export default function VotePage() {
   return (
     <div className="min-h-screen flex flex-col justify-between bg-batik-subtle">
       {/* Top Bar with Voter Info & Logout */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-brand-border py-3 px-4 shadow-xs">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-brand-border py-2.5 px-3 sm:px-6 shadow-xs">
+        <div className="max-w-4xl mx-auto flex items-center justify-between gap-2">
           <InstitutionalLogos />
 
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 border border-brand-gold/30 text-xs font-semibold text-brand-dark">
-              <User className="w-3.5 h-3.5 text-brand-gold" />
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 border border-brand-gold/30 text-xs font-semibold text-brand-dark">
+              <User className="w-3.5 h-3.5 text-brand-gold shrink-0" />
               <span className="truncate max-w-45">{voterIdentity}</span>
             </div>
 
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-100 text-xs font-semibold text-gray-700 transition-colors"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-100 text-xs font-semibold text-gray-700 transition-colors shrink-0"
               title="Keluar dari sesi"
             >
               <LogOut className="w-3.5 h-3.5 text-gray-500" />
@@ -148,10 +139,27 @@ export default function VotePage() {
       {/* Main Ballot Section */}
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 sm:py-12">
         {/* Header Titles & Official Sambutan Paragraphs */}
-        <div className="text-center max-w-2xl mx-auto mb-8 space-y-3.5">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100/80 border border-brand-gold/40 text-brand-dark font-serif font-bold text-xs uppercase tracking-wider">
-            <ShieldCheck className="w-4 h-4 text-brand-gold" />
-            <span>Surat Suara Elektronik Resmi</span>
+        <div className="relative text-center max-w-2xl mx-auto mb-10 space-y-3.5">
+          {/* Subtle Mascot Sit in the corner of introductory box (desktop only) */}
+          <div className="hidden lg:block absolute -left-28 top-4 w-28 h-28 pointer-events-none select-none z-10 drop-shadow-sm opacity-90 transition-transform hover:scale-105 duration-300">
+            <Image
+              src="/images/maskot-sit.png"
+              alt="Maskot Pilkadikip"
+              fill
+              className="object-contain"
+              sizes="112px"
+            />
+          </div>
+
+          {/* Subtle Mascot Stand cheering on the right (desktop only) */}
+          <div className="hidden lg:block absolute -right-28 top-6 w-28 h-36 pointer-events-none select-none z-10 drop-shadow-sm opacity-90 transition-transform hover:scale-105 duration-300">
+            <Image
+              src="/images/maskot-stand.png"
+              alt="Maskot Pilkadikip"
+              fill
+              className="object-contain"
+              sizes="112px"
+            />
           </div>
 
           <h1 className="font-serif font-bold text-3xl sm:text-4xl text-brand-dark tracking-tight">
@@ -174,23 +182,6 @@ export default function VotePage() {
               Seluruh mahasiswa KIP Kuliah PNJ memiliki kesempatan untuk berpartisipasi aktif, dengan memberikan hak suara mereka, dalam menentukan Ketua Umum Formadiksi PNJ periode selanjutnya.
             </p>
           </div>
-        </div>
-
-        {/* Global Compare Button: Toggle Visi & Misi for Both Candidates */}
-        <div className="flex justify-center mb-6">
-          <button
-            type="button"
-            onClick={handleToggleBothVisiMisi}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-brand-dark bg-white hover:bg-amber-50 border-2 border-brand-gold/40 shadow-xs hover:border-brand-gold transition-all"
-          >
-            <BookOpen className="w-4 h-4 text-brand-gold" />
-            <span>
-              {areAllExpanded
-                ? "Tutup Seluruh Visi & Misi Kedua Calon"
-                : "Buka Sekaligus & Bandingkan Visi-Misi Calon 1 & 2"}
-            </span>
-            <ChevronsUpDown className="w-3.5 h-3.5 text-gray-400 ml-1" />
-          </button>
         </div>
 
         {/* 2 Candidate Cards Grid */}

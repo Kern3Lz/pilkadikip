@@ -8,8 +8,8 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Akses ditolak. Silakan login sebagai administrator." }, { status: 403 });
     }
 
-    const stats = getAdminStats();
-    const voters = getAllVotersAudit();
+    const stats = await getAdminStats();
+    const voters = await getAllVotersAudit();
 
     return NextResponse.json({
       success: true,

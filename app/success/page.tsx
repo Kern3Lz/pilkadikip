@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, Suspense } from "react";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { InstitutionalLogos } from "@/components/BrandElements";
 import { InstitutionalFooter } from "@/components/InstitutionalFooter";
@@ -48,15 +49,38 @@ function SuccessContent() {
       });
 
   return (
-    <div className="w-full max-w-lg bg-white rounded-2xl border-2 border-brand-border shadow-lg p-6 sm:p-8 text-center">
-      {/* Status Icon */}
-      <div className="w-16 h-16 rounded-full bg-emerald-50 border-2 border-emerald-500 text-emerald-600 flex items-center justify-center mx-auto mb-5 shadow-xs">
-        <CheckCircle2 className="w-10 h-10 stroke-[2.5]" />
+    <div className="relative w-full max-w-lg">
+      {/* Decorative Mascot Stand on desktop side */}
+      <div className="hidden md:block absolute -left-36 bottom-0 w-36 h-56 pointer-events-none select-none z-10 drop-shadow-md transition-transform hover:scale-105 duration-300">
+        <Image
+          src="/images/maskot-stand.png"
+          alt="Maskot Pilkadikip"
+          fill
+          className="object-contain"
+          sizes="144px"
+        />
       </div>
 
-      <span className="inline-block px-3 py-1 rounded-full bg-amber-100 text-brand-gold font-serif font-bold text-xs uppercase tracking-wider mb-2">
-        Integritas Suara Terverifikasi
-      </span>
+      {/* Decorative Mascot Sit peeking on card top right */}
+      <div className="absolute -top-10 -right-4 sm:-right-8 w-20 h-20 sm:w-24 sm:h-24 pointer-events-none select-none z-20 drop-shadow-md">
+        <Image
+          src="/images/maskot-sit.png"
+          alt="Maskot Pilkadikip"
+          fill
+          className="object-contain"
+          sizes="96px"
+        />
+      </div>
+
+      <div className="w-full bg-white rounded-2xl border-2 border-brand-border shadow-lg p-6 sm:p-8 text-center relative z-10">
+        {/* Status Icon */}
+        <div className="w-16 h-16 rounded-full bg-emerald-50 border-2 border-emerald-500 text-emerald-600 flex items-center justify-center mx-auto mb-5 shadow-xs">
+          <CheckCircle2 className="w-10 h-10 stroke-[2.5]" />
+        </div>
+
+        <span className="inline-block px-3 py-1 rounded-full bg-amber-100 text-brand-gold font-serif font-bold text-xs uppercase tracking-wider mb-2">
+          Integritas Suara Terverifikasi
+        </span>
 
       <h1 className="font-serif font-bold text-2xl sm:text-3xl text-brand-dark tracking-tight mb-2">
         {isAlready ? "Hak Suara Telah Digunakan" : "Terima Kasih Telah Memilih!"}
@@ -106,14 +130,15 @@ function SuccessContent() {
         </p>
       </div>
     </div>
+  </div>
   );
 }
 
 export default function SuccessPage() {
   return (
     <div className="min-h-screen flex flex-col justify-between bg-batik-subtle">
-      <header className="py-6 px-4 border-b border-brand-border bg-white/70 backdrop-blur-xs">
-        <InstitutionalLogos />
+      <header className="py-4 px-4 border-b border-brand-border bg-white/80 backdrop-blur-xs flex items-center justify-center">
+        <InstitutionalLogos showTextOnMobile={true} />
       </header>
 
       <main className="flex-1 flex items-center justify-center px-4 py-10">

@@ -45,6 +45,36 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadData() {
+      try {
+        const res = await fetch("/api/admin/stats");
+        if (!res.ok) {
+          router.replace("/login");
+          return;
+        }
+        const data = await res.json();
+        if (isMounted) {
+          setStats(data.stats);
+          setVoters(data.voters || []);
+          setLoading(false);
+        }
+      } catch {
+        if (isMounted) {
+          router.replace("/login");
+        }
+      }
+    }
+
+    loadData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [router]);
+
   const fetchAdminData = async () => {
     try {
       setRefreshing(true);
@@ -59,14 +89,9 @@ export default function AdminPage() {
     } catch (e) {
       console.error(e);
     } finally {
-      setLoading(false);
       setRefreshing(false);
     }
   };
-
-  useEffect(() => {
-    fetchAdminData();
-  }, []);
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -101,11 +126,11 @@ export default function AdminPage() {
     return matchesSearch;
   });
 
-  if (loading) {
+  if (loading || !stats) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#FAF8F5]">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-brand-canvas">
         <div className="w-10 h-10 border-3 border-brand-gold border-t-transparent rounded-full animate-spin mb-3" />
-        <p className="font-serif text-sm text-brand-dark">Memuat Dashboard Rekapitulasi...</p>
+        <p className="font-serif text-sm text-brand-dark">Memverifikasi akses administrator...</p>
       </div>
     );
   }
@@ -113,20 +138,21 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen flex flex-col justify-between bg-batik-subtle">
       {/* Top Header */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-brand-border py-3 px-4 shadow-xs">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-brand-border py-2.5 px-3 sm:px-6 shadow-xs">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 sm:gap-3">
             <InstitutionalLogos />
-            <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-md bg-brand-dark text-brand-yellow font-serif font-bold text-xs">
+            <span className="hidden md:inline-block px-2.5 py-0.5 rounded-md bg-brand-dark text-brand-yellow font-serif font-bold text-xs">
               PANITIA
             </span>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <button
               onClick={fetchAdminData}
               disabled={refreshing}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-brand-border hover:bg-gray-100 text-xs font-semibold text-gray-700 transition-colors"
+              className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg border border-brand-border hover:bg-gray-100 text-xs font-semibold text-gray-700 transition-colors shrink-0"
+              title="Segarkan Data"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`} />
               <span className="hidden sm:inline">Segarkan Data</span>
@@ -134,10 +160,11 @@ export default function AdminPage() {
 
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-100 text-xs font-semibold text-red-600 transition-colors"
+              className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-100 text-xs font-semibold text-red-600 transition-colors shrink-0"
+              title="Keluar"
             >
               <LogOut className="w-3.5 h-3.5" />
-              <span>Keluar</span>
+              <span className="hidden sm:inline">Keluar</span>
             </button>
           </div>
         </div>
@@ -332,7 +359,7 @@ export default function AdminPage() {
 
               <select
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as any)}
+                onChange={(e) => setFilterStatus(e.target.value as "all" | "voted" | "unvoted")}
                 className="py-1.5 px-3 text-xs rounded-xl border border-gray-300 text-gray-700 bg-white outline-none focus:border-brand-gold"
               >
                 <option value="all">Semua Status</option>

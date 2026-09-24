@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: "Pilkadikip PNJ 2026 - Lead With Integrity Grow With Energy",
   description: "Platform Resmi Pemungutan Suara E-Voting Pemilihan Ketua Umum Formadiksi KIP Kuliah Politeknik Negeri Jakarta 2026",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/images/pilkadikip.png",
   },
 };
 

@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     const voterCookie = req.cookies.get("pilkadikip_voter_session")?.value;
     if (voterCookie) {
       const identifier = decodeURIComponent(voterCookie);
-      const voter = getVoter(identifier);
+      const voter = await getVoter(identifier);
       if (voter) {
         return NextResponse.json({
           authenticated: true,

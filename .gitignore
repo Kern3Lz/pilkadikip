@@ -43,5 +43,12 @@ next-env.d.ts
 # additional
 DESIGN.md
 PRD_WEB_VOTING_PILKADIKIP.md
-data_akun_kip.xlsx
 design-vote.jpeg
+# Sensitive data & local database files
+/data
+/data/*
+*.xlsx
+
+/scripts
+!/scripts/schema.sql
+!/scripts/seed-supabase.ts

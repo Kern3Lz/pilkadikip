@@ -40,7 +40,7 @@ export const CANDIDATES: Candidate[] = [
     misi: [
       {
         title: "OME",
-        desc: "Membangun lingkungan dan budaya organisasi yang hangat, menyeluruh, dan merangkul seluruh mahasiswa KIP Kuliah PNJ dan pengurus Formadiksi.",
+        desc: "Membangun lingkungan dan budaya organisasi yang hangat, menyeluruh, dan merangkul seluruh mahasiswa KIP Kuliah PNJ dan pengurus FORMADIKSI.",
       },
       {
         title: "GROWTH",

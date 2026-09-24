@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyVoterCredentials, ADMIN_PASSWORD } from "@/lib/db";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   try {
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "127.0.0.1";
+    // Batas aman untuk demo: 60 percobaan login per menit per IP
+    const rateCheck = checkRateLimit(`login_${ip}`, 60, 60 * 1000);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: `Terlalu banyak percobaan masuk. Silakan tunggu ${rateCheck.retryAfter} detik.` },
+        { status: 429 }
+      );
+    }
+
     const body = await req.json();
     const { identifier, password, role } = body;
 
@@ -12,6 +23,8 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    const isHttps = req.headers.get("x-forwarded-proto") === "https" || process.env.NODE_ENV === "production";
 
     // Check if Admin Login
     if (role === "admin" || identifier.toLowerCase().trim() === "admin") {
@@ -24,7 +37,7 @@ export async function POST(req: NextRequest) {
 
         response.cookies.set("pilkadikip_admin_session", "authenticated_admin", {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: isHttps,
           sameSite: "lax",
           path: "/",
           maxAge: 60 * 60 * 6, // 6 hours
@@ -40,7 +53,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Voter authentication
-    const result = verifyVoterCredentials(identifier, password);
+    const result = await verifyVoterCredentials(identifier, password);
     if (!result.success || !result.voter) {
       return NextResponse.json(
         { error: result.message || "Autentikasi gagal." },
@@ -62,7 +75,7 @@ export async function POST(req: NextRequest) {
     // Set signed-like session cookie
     response.cookies.set("pilkadikip_voter_session", encodeURIComponent(voter.identifier), {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isHttps,
       sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 4, // 4 hours

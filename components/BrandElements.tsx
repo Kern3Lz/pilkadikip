@@ -1,32 +1,82 @@
 import React from "react";
+import Image from "next/image";
 
-export function InstitutionalLogos({ className = "" }: { className?: string }) {
+export function InstitutionalLogos({
+  className = "",
+  showTextOnMobile = false,
+}: {
+  className?: string;
+  showTextOnMobile?: boolean;
+}) {
   return (
-    <div className={`flex items-center justify-center gap-4 sm:gap-6 ${className}`}>
-      {/* PNJ Emblem Badge */}
-      <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-white border border-brand-border shadow-xs">
-        <svg viewBox="0 0 48 48" className="w-8 h-8 text-[#006699]" fill="currentColor">
-          <circle cx="24" cy="24" r="22" fill="#E6F4FA" stroke="#006699" strokeWidth="2" />
-          <path d="M24 8 L36 18 L30 38 L18 38 L12 18 Z" fill="none" stroke="#006699" strokeWidth="2.5" strokeLinejoin="round" />
-          <circle cx="24" cy="24" r="5" fill="#FFD000" stroke="#C88A00" strokeWidth="1" />
-          <path d="M20 28 Q24 34 28 28" stroke="#006699" strokeWidth="2" fill="none" strokeLinecap="round" />
-        </svg>
-        <div className="text-left">
-          <div className="text-[11px] font-bold text-gray-900 leading-tight tracking-tight">POLITEKNIK NEGERI</div>
-          <div className="text-[10px] font-medium text-brand-gold tracking-widest leading-none">JAKARTA</div>
+    <div className={`flex items-center gap-2 sm:gap-3 flex-nowrap ${className}`}>
+      {/* Container 3 Logo Bersanding Sejajar dalam 1 Kapsul Elegan */}
+      <div className="flex items-center gap-2 sm:gap-3 p-1 sm:p-1.5 px-2.5 sm:px-3 rounded-xl bg-white border border-brand-border shadow-xs">
+        {/* 1. Logo PNJ */}
+        <div className="flex items-center gap-1.5 shrink-0" title="Politeknik Negeri Jakarta">
+          <div className="relative w-7 h-7 sm:w-8 sm:h-8 shrink-0">
+            <Image
+              src="/images/logo-pnj.png"
+              alt="Logo PNJ"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <div className={`text-left ${showTextOnMobile ? "block" : "hidden sm:block"}`}>
+            <div className="text-[10px] sm:text-[11px] font-bold text-gray-900 leading-tight tracking-tight">
+              PNJ
+            </div>
+            <div className="text-[9px] sm:text-[10px] font-medium text-brand-gold leading-none">
+              Politeknik
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div className="h-6 w-px bg-brand-border" />
+        <div className="h-5 w-px bg-brand-border/80 shrink-0" />
 
-      {/* Formadiksi KIP-K Emblem Badge */}
-      <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-white border border-brand-border shadow-xs">
-        <div className="w-8 h-8 rounded-full bg-amber-50 border border-brand-gold flex items-center justify-center text-brand-gold font-serif font-bold text-xs">
-          KIP
+        {/* 2. Logo Formadiksi */}
+        <div className="flex items-center gap-1.5 shrink-0" title="Formadiksi KIP-K PNJ">
+          <div className="relative w-7 h-7 sm:w-8 sm:h-8 shrink-0">
+            <Image
+              src="/images/formadiksi.png"
+              alt="Logo Formadiksi KIP-K"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <div className={`text-left ${showTextOnMobile ? "block" : "hidden sm:block"}`}>
+            <div className="text-[10px] sm:text-[11px] font-bold text-gray-900 leading-tight tracking-tight">
+              FORMADIKSI
+            </div>
+            <div className="text-[9px] sm:text-[10px] font-medium text-brand-gold leading-none">
+              KIP Kuliah
+            </div>
+          </div>
         </div>
-        <div className="text-left">
-          <div className="text-[11px] font-bold text-gray-900 leading-tight tracking-tight">FORMADIKSI KIP-K</div>
-          <div className="text-[10px] font-medium text-brand-gold tracking-widest leading-none">PNJ 2026</div>
+
+        <div className="h-5 w-px bg-brand-border/80 shrink-0" />
+
+        {/* 3. Logo Pilkadikip */}
+        <div className="flex items-center gap-1.5 shrink-0" title="Pilkadikip 2026">
+          <div className="relative w-7 h-7 sm:w-8 sm:h-8 shrink-0">
+            <Image
+              src="/images/pilkadikip.png"
+              alt="Logo Pilkadikip 2026"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <div className={`text-left ${showTextOnMobile ? "block" : "hidden sm:block"}`}>
+            <div className="text-[10px] sm:text-[11px] font-bold text-gray-900 leading-tight tracking-tight">
+              PILKADIKIP
+            </div>
+            <div className="text-[9px] sm:text-[10px] font-medium text-brand-gold leading-none">
+              2026
+            </div>
+          </div>
         </div>
       </div>
     </div>
